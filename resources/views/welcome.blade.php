@@ -16,7 +16,7 @@
                         <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                             <td class="" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; color: #fff; font-weight: 500; text-align: center; border-radius: 3px 3px 0 0; background-color: #73436D; margin: 0; padding: 20px;"
                                 align="center" bgcolor="#111" valign="top">
-                                <h1 href="#" style="font-size:32px;color:#fff;"> Welcome in <b>X-Buyer<b></h1> 
+                                <h1 href="#" style="font-size:32px;color:#fff;"> Welcome in <i><b>X-Buyer<b></i></h1> 
                                
                             </td>
                         </tr>
