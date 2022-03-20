@@ -20,6 +20,8 @@ edit one from b1
 edit tow from b1 
 
 
+b2 edit 1
+b2 edit 2
 
 
 
