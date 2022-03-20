@@ -13,8 +13,7 @@ use Illuminate\Support\Facades\Route;
 
 
 // 
-
-
+//samer
 Route::post('/register' ,[AuthApiController::class, 'register'      ]);///
   Route::post('/login',  [AuthApiController::class, 'login'         ])   ;
 
