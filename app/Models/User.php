@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
     protected $table = 'users';
@@ -24,6 +24,14 @@ class User extends Authenticatable implements MustVerifyEmail
 
     protected $hidden = [  'password', 'remember_token',];
 
-
+    public function item()
+    {
+        return $this->hasMany(Item::class );
+    }
+ /*___________________________________________________________________________________________________________________________________*/
+    public function comment()
+     {
+        return $this->hasMany(Comment::class );
+     }
 
 }

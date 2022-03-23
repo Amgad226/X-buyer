@@ -17,6 +17,7 @@ class ItemController extends Controller
     // {
     //     $this->middleware(['auth','verified']);
     // }
+    
     public function get_Categories(){
         // dd(Auth::id());
         
@@ -98,8 +99,9 @@ class ItemController extends Controller
                     'price'               => $request->price,
                     'img'                 => $image_path       //هون حطيت باث الصورة يلي بل بابليك مشان يروح الباث عل داتا بيز واسيل تاخد هاد الباث 
                     ];
-    
+         // dd();
                 $item = Item::create($data);
+                // dd();
                 //dd($item->img);
                 $expiration_date = $request->expiration_date;//اخدت تاريخ انتهاء الصلاحية من الداتابيز
                 $remaining_days = Carbon::now()->diffInDays(Carbon::parse($expiration_date),$absolute = false); //طرحت تاريخ انتهاء الصلاحية من تاريخ اليوم وهوة متغير
@@ -138,41 +140,34 @@ class ItemController extends Controller
         }
     // _______________________________________________________________________________________________________
     public function updateItem(Request $request ,$id){
-        $item = Item::where('id',$id)->where('user_id' , Auth::id())->first(); //...
-        if( $item  === null)
-        {
-            return response()->json([
-                'status' => '0',
-                'details' => 'access denied'
-            ]);
-        }
-       // $item = Item::where('id',$id)->where('user_id' , Auth::id())->first();
-        $validator = Validator::make($request->all(), [
-            'contact_information' => ['required'],
-            'title'               => ['required'],
-            'categorie_id'        => ['required'],
-            'quantity'            => ['required'],
-            'price'               => ['required'],
-            'img'                 => ['nullable']
-        ]);
-
-        if($validator->fails())
-        {
-            return response()->json([
-                'status'       => '0',
-                'details'      => $validator->errors(), 422
-            ]);
-        }
-
-        if (!($request->img==null))
-        {
-            
-            $destination_path = 'public/images/items';                      
-            $request->file('img')->storeAs($destination_path,$request->img->getClientOriginalName());  
-            $image_path = "/storage/images/items/" . $request->img->getClientOriginalName();          
-            
-            $data = [
-                'categorie_id'        => $request->categorie_id,
+     
+                $validator = Validator::make($request->all(), [
+                    'contact_information' => ['required'],
+                    'title'               => ['required'],
+                    'categorie_id'        => ['required'],
+                    'quantity'            => ['required'],
+                    'price'               => ['required'],
+                    'img'                 => ['nullable']
+                ]);
+                
+                if($validator->fails())
+                {
+                    return response()->json([
+                        'status'       => '0',
+                        'details'      => $validator->errors(), 422
+                    ]);
+                }
+                
+       $item = Item::where('id',$id)->where('user_id' , Auth::id())->first(); //...
+                if (!($request->img==null))
+                {
+                    
+                    $destination_path = 'public/images/items';                      
+                    $request->file('img')->storeAs($destination_path,$request->img->getClientOriginalName());  
+                    $image_path = "/storage/images/items/" . $request->img->getClientOriginalName();          
+                    
+                    $data = [
+                        'categorie_id'        => $request->categorie_id,
                 'title'               => $request->title,   
                 'contact_information' => $request->contact_information,
                 'quantity'            => $request->quantity,
@@ -272,12 +267,6 @@ class ItemController extends Controller
     public function deleteItem($id){
         $item = Item::where('id',$id)->where('user_id' , Auth::id())->first();
 
-        if( $item == null)
-        {
-            return response()->json([
-                'status' => '0',
-                'details' => 'access denied' ]);
-        }
         if ($item != null) {
         $item->delete();
         }

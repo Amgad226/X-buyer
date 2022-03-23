@@ -15,12 +15,11 @@ use Illuminate\Support\Str;
 
 class VerificationController extends Controller
 {
-    public function send_verify(Request $request)
-    {
-        $email = $request->input('email');
-        $user=User::where('email',$email)->first();
+    public function send_verify(Request $request){
+        $email=Auth::user()->email;
 
-        if($user==null)
+
+        if($email==null)
         return response()->json(['mes'=>'user not exist',404  ]);
 
 
@@ -33,11 +32,11 @@ class VerificationController extends Controller
             // 'title'=>'mail',
             'body'=>$token
         ];
-        Mail::to($user->email)->send(new verifyEmail ($details));
+        Mail::to($email)->send(new verifyEmail ($details));
 
         try 
             {
-                DB::table('users')->where('email',Auth::user()->email)->update(['confirmation_code'=>$token,'email_verified_at'=>1]);
+                DB::table('users')->where('email',Auth::user()->email)->update(['confirmation_code'=>$token]);
                 return response()->json(['Message'=>'check your email']);
             }  
 
@@ -47,10 +46,8 @@ class VerificationController extends Controller
             }
     }
 
-    // 'email_verified'=>true,
-    
-    public function confirm_verify(Request $request)
-    {
+//_____________________________________________________________________________________/
+  public function confirm_verify(Request $request) {
        
         $r= DB::table('users')->where('email',Auth::user()->email)->first();
          if($r->email_verified==1)
@@ -68,8 +65,14 @@ class VerificationController extends Controller
         // dd('dd');
        DB::table('users')->where('email',Auth::user()->email)->update(['email_verified'=>true,'confirmed_at'=>date("Y-m-d h-i-s")]);
 
-        return response()->json(['mes'=>'success']);
-    }
+        return response()->json(['mes'=>'success']);    }
+
+
+ 
+ 
+ 
+ 
+ 
 
 }
 
