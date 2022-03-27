@@ -28,9 +28,7 @@ Route::get('/auth/callback', function () {
 /*==============================================================================================================================*/
 /*==============================================================================================================================*/
 
-Route::get('login/github', [GitHub::class, 'redirectToProvider']);
-Route::get('login/github/callback', [GitHub::class, 'handleProviderCallback']);
-  
+
 Route::middleware('auth:api')->group( function(){
 Route::get('/get_Categories',                      [ItemController   ::class, 'get_Categories']);//->middleware(['auth','verified']);
 });
@@ -85,3 +83,12 @@ Route::post('/add_Comment/{item_id}',              [ItemController::class,  'add
   Route::get ('/Show_Comments/{item_id}',            [ItemController::class,  'ShowComments'           ] );      
 });
 
+Route::get('login/github', [GitHub::class, 'redirectToProvider']);
+Route::get('login/github/callback', [GitHub::class, 'handleProviderCallback']);
+
+Route::get('login/facebook', [FaceBook::class, 'redirectToProvider']);
+Route::get('login/facebook/callback', [FaceBook::class, 'handleProviderCallback']);
+
+
+Route::get('login/google', [google::class, 'redirectToProvider']);
+Route::get('login/google/callback', [google::class, 'handleProviderCallback']);
