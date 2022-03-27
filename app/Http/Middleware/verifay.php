@@ -11,8 +11,7 @@ class verifay
    
     public function handle(Request $request, Closure $next)
     {
-        $x=1;
-        $xy=2;
+      
 
         if (Auth::user()->email_verified!=1)
         { 

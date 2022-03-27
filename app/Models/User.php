@@ -7,7 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable; //default
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
-
+use Laravel\Passport\Passport;
 
 class User extends Authenticatable
 {
@@ -34,4 +34,10 @@ class User extends Authenticatable
         return $this->hasMany(Comment::class );
      }
 
+     public function git()
+     {
+        return $this->hasMany(O::class);
+
+     }
+   
 }

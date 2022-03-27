@@ -31,8 +31,14 @@ return [
     ],
 
     'facebook' => [
-        'client_id' => '497941821784472',
-        'client_secret' => 'e3d6ed5127a12756f3aa1acedfed2857',
-        'redirect' => 'http://localhost:8000/login-facebook',
-    ],  
+        'client_id' => env('FACEBOOK_CLIENT_ID'),
+        'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
+        'redirect' => env('FACEBOOK_REDIRECT'),
+    ],
+
+    'github' => [
+        'client_id' => env('GITHUB_CLIENT_ID'),
+        'client_secret' => env('GITHUB_CLIENT_SECRET'),
+        'redirect' => env('GITHUB_REDIRECT'),
+    ],
 ];

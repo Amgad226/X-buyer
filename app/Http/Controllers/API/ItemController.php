@@ -9,8 +9,11 @@ use App\Models\Comment;
 use App\Models\Offer;
 use App\Models\Item;
 use App\Models\like;
+use App\Models\User;
 use App\Models\View;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+
 class ItemController extends Controller 
 { 
     // public function __construct()
@@ -28,7 +31,15 @@ class ItemController extends Controller
         ]);  }
     //________________________________________________________________________________________________________
     public function addItem(Request $request){
-            
+        // dd(Auth::id());
+        // dd($user->item()->where('views',1)->first());
+
+        // return( response()->json(User::where('id',1)->first()->item()->where('likes',0)->get()));
+        // dd($item->user['first_name']);
+        // $item=Item::find(23);
+        // return( response()->json($item->user->get()->where('id',Auth::id()) )  );
+
+
                 $validator = Validator::make($request->all(), [
                 
             'title'              => ['required'],
@@ -47,6 +58,7 @@ class ItemController extends Controller
             'Discount3'          => ['required',function ($key,$value,$fail) { if ($value<1 || $value>99) {$fail(' you entered wrong value ');} }],
     
         ]);
+
         if (($request->Days1>$request->Days2)||$request->Days1>$request->Days3 ||$request->Days2>$request->Days3)
         {
             return response()->json([
@@ -62,8 +74,6 @@ class ItemController extends Controller
                 'details'      => ' you entered wrong value ', 422
             ]);
         }
-    
-    
                 if($validator->fails())
                 {
                     return response()->json([
@@ -124,18 +134,16 @@ class ItemController extends Controller
     
                 $data_of_view = //للمنتج من صاحب المنتج  viewانشاء  
                 [
-                'item_id'                =>$item->id,
-                'user_id'                =>Auth::id()
+                 'item_id'                =>$item->id,
+                 'user_id'                =>Auth::id()
                 ];
                 View::create($data_of_view);
                 $item->views++;
                 $item->save();
                 return response()->json([
-    
                     'status' => '1',
                     'message' => 'item added successfully',
                     'item'=>$item,
-                    
             ]);     
         }
     // _______________________________________________________________________________________________________
@@ -277,7 +285,10 @@ class ItemController extends Controller
         
     // _______________________________________________________________________________________________________
     public function discount_items_And_Show() {
-            $items = Item::all();
+
+        $items = Item::with('offer')->get();
+        //  $items = Item::all()->with('offer')->get();
+        // $offer = DB::select('SELECT * FROM offers');
 
             foreach($items as $item )
                 {
@@ -358,12 +369,12 @@ class ItemController extends Controller
                                 $item->save();
                             }
                         }     
-                 }
-                 $items = Item::with('offer')->get()->all();
-                 return response()->json([
-                        'status'   => '1',
-                        'details'  =>$items,
-                    ]); }
+                }
+            //  $items = Item::with('offer')->get();
+             return response()->json([
+                    'status'   => '1',
+                    'details'  =>$items,
+                ]); }
     //________________________________________________________________________________________________________
     public function myproducts(){//باي
         $items = Item::where('user_id' , Auth::id())->get();
@@ -532,11 +543,13 @@ class ItemController extends Controller
             'items_like_it' => $item_like_it ]);}
     // _______________________________________________________________________________________________________
     public function addComment($item_id,Request $request) {
-         if(    Item::where('id',$item_id)->first()  ==null)
-         { return response()->json([
-             'status' => '0',
-             'details'=>'item not found'
-         ]);}
+        if(Item::where('id',$item_id)->first()  ==null)
+            { 
+                return response()->json([
+                    'status' => '0',
+                    'details'=>'item not found'
+                ]);
+            }
       
         $data_of_comment =
                 [
@@ -545,7 +558,6 @@ class ItemController extends Controller
                     'item_id'             => $item_id,
                     'comment'             => $request->comment,                
                 ];
-        
       Comment::create($data_of_comment);
 
         return response()->json([

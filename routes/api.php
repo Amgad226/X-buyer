@@ -5,27 +5,32 @@ use App\Http\Controllers\API\AuthApiController;
 use App\Http\Controllers\API\ForgetAndRestPass;
 use App\Http\Controllers\API\ItemController;
 use App\Http\Controllers\API\VerificationController ;
+use App\Http\Controllers\Socialite\GitHub;
 // use App\Http\Controllers\API\VerificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Laravel\Socialite\Facades\Socialite;
 // use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Facades\Socialite as  sss;
-/*==============================================================================================================================*/
-/*==============================================================================================================================*/
-/*==============================================================================================================================*/
 
+use Laravel\Socialite\Facades\Socialite;
+ 
 Route::get('/auth/redirect', function () {
-  return Socialite::driver('github')->redirect();
+    return Socialite::driver('github')->redirect();
 });
-
+ 
 Route::get('/auth/callback', function () {
-  $user = Socialite::driver('github')->user();
-
-  // $user->token
+    $user = Socialite::driver('github')->user();
+ 
+    // $user->token
 });
+/*==============================================================================================================================*/
+/*==============================================================================================================================*/
+/*==============================================================================================================================*/
 
+Route::get('login/github', [GitHub::class, 'redirectToProvider']);
+Route::get('login/github/callback', [GitHub::class, 'handleProviderCallback']);
+  
 Route::middleware('auth:api')->group( function(){
 Route::get('/get_Categories',                      [ItemController   ::class, 'get_Categories']);//->middleware(['auth','verified']);
 });
@@ -74,7 +79,8 @@ Route::middleware('auth:api')->group( function(){
   Route::get ('/AddLike/{item_id}',                  [ItemController::class,  'AddLike'                ] );
   Route::get ('/UnLike/{item_id}',                   [ItemController::class,  'UnLike'                 ] );
   Route::get ('/Get_Items_Liked',                    [ItemController::class,  'Get_Items_Liked'        ] );
-  Route::post('/add_Comment/{item_id}',              [ItemController::class,  'addComment'             ] );
+Route::post('/add_Comment/{item_id}',              [ItemController::class,  'addComment'             ] );
+
   Route::post('/remove_Comment/{comm_id}',           [ItemController::class,  'removeComment'          ] );
   Route::get ('/Show_Comments/{item_id}',            [ItemController::class,  'ShowComments'           ] );      
 });

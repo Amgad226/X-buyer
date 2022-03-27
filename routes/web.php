@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Socialite\FaceBook;
+use App\Http\Controllers\Socialite\GitHub;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -34,3 +36,10 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/redirect/{service}', 'SocialController@redirect');
 
 Route::get('/callback/{service}', 'SocialController@callback');
+
+
+Route::get('login/github', [GitHub::class, 'redirectToProvider']);
+Route::get('login/github/callback', [GitHub::class, 'handleProviderCallback']);
+
+Route::get('login/facebook', [FaceBook::class, 'redirectToProvider']);
+Route::get('login/facebook/callback', [FaceBook::class, 'handleProviderCallback']);

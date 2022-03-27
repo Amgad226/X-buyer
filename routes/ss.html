@@ -1,0 +1,18 @@
+You may configure additional symbolic links in your filesystems configuration file. Each of the configured links will be created when you run the storage:link command:
+CTRL R  => filesystems 
+'links' => [
+    public_path('storage') => storage_path('app/public'),
+    public_path('images') => storage_path('app/images'),
+],
+---------------------------------------------------------------
+
+$comment = Comment::find(1);
+بيبحث بل برايميري كي عن ال 1
+-----------------------------------------------------
+
+when i have extra variable in many to many relation 
+user_id
+item_id 
+_quantity_
+in model when i declear the method i add withPivot
+return $this->belongToMany(item::class )->withPivot('quantity');
