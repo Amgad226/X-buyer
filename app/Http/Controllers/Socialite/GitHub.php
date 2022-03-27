@@ -30,11 +30,13 @@ class GitHub extends Controller
             $email =$githubUser->getEmail();
         }
         // dd($githubUser->token);
+        $name= explode(" ",$githubUser->getName());
         $user = User::create(
             
             [
-                'first_name' => $githubUser->getName(),
-                'last_name' =>'',
+                'first_name' =>$name[0],
+
+                'last_name' =>$name[1],
                 'img' => $githubUser->getAvatar(),
                 'email' => $email,
                 ]
@@ -44,7 +46,7 @@ class GitHub extends Controller
             $success['token'] = $user->createToken('a')->accessToken;
             
             
-           dd('User successfully login'.'                        '.'token'.'   =>    '.$success['token'].'                                                                                                                     '. $user  );
+        //    dd('User successfully login'.'                        '.'token'.'   =>    '.$success['token'].'                                                                                                                     '. $user  );
             return response()->json([
                 'msg'=> 'User successfully login',
                  'token'=>$success,

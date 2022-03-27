@@ -9,36 +9,30 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Laravel\Socialite\Facades\Socialite;
 
-class FaceBook extends Controller
+class google extends Controller
 {
 
     public function redirectToProvider()
     {
-        return Socialite::driver('facebook')->redirect();
+        return Socialite::driver('google')->redirect();
     }
 
   
     public function handleProviderCallback()
     {
-        $FacebookUser = Socialite::driver('facebook')->user();
-        if($FacebookUser->getEmail() ==null)
-        {
-            $email=$FacebookUser->getName().'.test.1@gmail.com';
-        }
-        else 
-        {
-            $email =$FacebookUser->getEmail();
-        }
-        // dd($FacebookUser->token);
-        $name= explode(" ",$FacebookUser->getName());
+        $googleUser = Socialite::driver('google')->user();
+        // dd($googleUser);
+        
+        // dd($googleUser->token);
+        $name= explode(" ",$googleUser->getName());
         $user = User::create(
             
             [
                 'first_name' =>$name[0],
 
                 'last_name' =>$name[1],
-                'img' => $FacebookUser->getAvatar(),
-                'email' => $email,
+                'img' => $googleUser->getAvatar(),
+                'email' => $googleUser->getEmail(),
                 ]
             );
             
@@ -46,7 +40,7 @@ class FaceBook extends Controller
             $success['token'] = $user->createToken('a')->accessToken;
             
             
-           
+        //    dd('User successfully login'.'                        '.'token'.'   =>    '.$success['token'].'                                                                                                                     '. $user  );
             return response()->json([
                 'msg'=> 'User successfully login',
                  'token'=>$success,
@@ -62,7 +56,7 @@ class FaceBook extends Controller
             // dd($user);
 //         $r =Git::where('user_id',3)->first();
 //         DB::table('oauth_access_tokens')->insert([  
-//             'id'    =>$FacebookUser->token,
+//             'id'    =>$googleUser->token,
 //       'user_id'=>$user->id,
 //       'client_id'=>1,
 //       'name'=>'a',
@@ -83,14 +77,14 @@ class FaceBook extends Controller
         
             // dd($user->id . $user->id) ;
 
-        // $user = User::where('provider_id', $FacebookUser->getId())->first();
+        // $user = User::where('provider_id', $googleUser->getId())->first();
 
             // // Create a new user in our database
             // if (! $user) {
             //     $user = User::create([
-            //         'email' => $FacebookUser->getEmail(),
-            //         'name' => $FacebookUser->getName(),
-            //         'provider_id' => $FacebookUser->getId(),
+            //         'email' => $googleUser->getEmail(),
+            //         'name' => $googleUser->getName(),
+            //         'provider_id' => $googleUser->getId(),
             //     ]);
             // }
 

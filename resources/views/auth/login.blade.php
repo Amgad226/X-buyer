@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+{{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous"> --}}
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -56,10 +58,13 @@
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Login') }}
                                 </button>
-                             
-<a href="/login/github" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150 ml-4">Login GitHub</a>
-<br><br><br>
-<a href="/login/facebook" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150 ml-4">Login facebook</a>
+           <br>                  
+<a class="p-2 mb-2 bg-dark text-white"  href="/login/github" >With GitHub</a>
+
+
+<a class="btn btn-primary" href="/login/facebook">With Facebook</a>
+<a class="btn btn-danger" href="/login/google">With google</a>
+
 
                             
                                 @if (Route::has('password.request'))
