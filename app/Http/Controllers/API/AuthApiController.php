@@ -12,11 +12,12 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Passport\HasApiTokens;
 use Laravel\Passport\Passport;
+use Laravel\Socialite\Facades\Socialite;
+
 class AuthApiController extends Controller
 {
     public function register(Request $request)
     {
-    //dsadas
         
         $validator = Validator::make($request-> all(),[
             'first_name' => ['required', 'string', 'max:50','min:3'],
@@ -77,8 +78,9 @@ class AuthApiController extends Controller
         // event(new Registered($user));
         // $user->notify(new WelcomeEmailNotification());
         // Mail::to($user->email)->send(new ResetMail ($details));
-// dd($input['first_name']);
+        // dd($input['first_name']);
         Mail::to($user->email)->send(new welcomeMail($input));
+
         return response()->json([
         'msg' => 'User successfully registered',
         'token' => $success,
@@ -109,6 +111,40 @@ class AuthApiController extends Controller
       $request->user()->token()->revoke();
       return response()->json(['message' => 'User successfully logged out']);
     }
-    //goo goo goo
+        // _________________________________________________________________________________
+        function requestTokenGoogle(Request $request){
+            // dd();
+            // Getting the user from socialite using token from google
+            $UserFormGoogle = Socialite::driver('google')->stateless()->userFromToken($request->token);
+            if (!$UserFormGoogle)
+            {
+                return response()->json('You do not have access to this email ',402);
+            }
+            $name= explode(" ",$UserFormGoogle->name);
+    
+            $UserToDataBase = User::create(
+                [
+                    'email' => $UserFormGoogle->email,
+                    'first_name'=>$name[0],
+                    'last_name'=>$name[1],
+                    'img'=>$UserFormGoogle->avatar,
+    
+                    // 'email_verified_at'=>date("Y-m-d h-i-s"),
+                    // 'confirmed_at'=>date("Y-m-d h-i-s"),
+                    // 'email_verified'=>true,
+                    // 'confirmation_code'=>rand(1,1000),
+                ]);
+            $UserToDataBase->email_verified_at=date("Y-m-d h-i-s");
+            $UserToDataBase->confirmed_at    =date("Y-m-d h-i-s");
+            $UserToDataBase->email_verified  =true;
+            $UserToDataBase->confirmation_code  =rand(1, 1000);
+            $UserToDataBase->save();
+      
+            $success['token'] = $UserToDataBase->createToken('AyhamAseelAmgadNour')->accessToken;
+    
+             return response()->json([
+            'msg' => 'User successfully registered',
+            'token' => $success,
+            'user' => $UserToDataBase
+            ], 201);}
 }
-//qwewqeqweqwe

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\Curl;
 use App\Http\Controllers\Socialite\FaceBook;
 use App\Http\Controllers\Socialite\GitHub;
 use App\Http\Controllers\Socialite\google;
@@ -48,3 +50,6 @@ Route::get('login/facebook/callback', [FaceBook::class, 'handleProviderCallback'
 
 Route::get('login/google', [google::class, 'redirectToProvider']);
 Route::get('login/google/callback', [google::class, 'handleProviderCallback']);
+
+
+Route::get('log', [Curl::class, 'Curl']);

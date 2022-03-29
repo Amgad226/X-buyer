@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Socialite;
+use Illuminate\Http\Request;
 
 use App\Models\User;
 use App\Http\Controllers\Controller;
@@ -10,21 +11,22 @@ use Illuminate\Support\Facades\DB;
 use Laravel\Socialite\Facades\Socialite;
 
 class google extends Controller
-{
-
+{ 
     public function redirectToProvider()
     {
         return Socialite::driver('google')->redirect();
     }
 
-  
     public function handleProviderCallback()
     {
         $googleUser = Socialite::driver('google')->user();
-        // dd($googleUser);
+        dd($googleUser);
         
         // dd($googleUser->token);
         $name= explode(" ",$googleUser->getName());
+       
+        if (!$name[1])
+        $a='a';
         $user = User::create(
             
             [
@@ -35,11 +37,9 @@ class google extends Controller
                 'email' => $googleUser->getEmail(),
                 ]
             );
-            
             // $user = Auth::user();
             $success['token'] = $user->createToken('a')->accessToken;
-            
-            
+
         //    dd('User successfully login'.'                        '.'token'.'   =>    '.$success['token'].'                                                                                                                     '. $user  );
             return response()->json([
                 'msg'=> 'User successfully login',
@@ -49,46 +49,41 @@ class google extends Controller
     
     
     }
+
+
+    function requestTokenGoogle(Request $request){
+        // dd();
+        // Getting the user from socialite using token from google
+        $user = Socialite::driver('google')->stateless()->userFromToken($request->token);
+        if (!$user)
+        {
+            return response()->json('You do not have access to this email ',402);
+        }
+        $name= explode(" ",$user->name);
+
+        $userFromDb = User::create(
+            [
+                'email' => $user->email,
+                'first_name'=>$name[0],
+                'last_name'=>$name[1],
+                'img'=>$user->avatar,
+
+                // 'email_verified_at'=>date("Y-m-d h-i-s"),
+                // 'confirmed_at'=>date("Y-m-d h-i-s"),
+                // 'email_verified'=>true,
+                // 'confirmation_code'=>rand(1,1000),
+            ]);
+        $userFromDb->email_verified_at=date("Y-m-d h-i-s");
+        $userFromDb->confirmed_at    =date("Y-m-d h-i-s");
+        $userFromDb->email_verified  =true;
+        $userFromDb->confirmation_code  =rand(1, 1000);
+        $userFromDb->save();
+  
+        $success['token'] = $userFromDb->createToken('AyhamAseelAmgadNour')->accessToken;
+
+         return response()->json([
+        'msg' => 'User successfully registered',
+        'token' => $success,
+        'user' => $userFromDb
+        ], 201);}
 }
-
-
- // dd(1);
-            // dd($user);
-//         $r =Git::where('user_id',3)->first();
-//         DB::table('oauth_access_tokens')->insert([  
-//             'id'    =>$googleUser->token,
-//       'user_id'=>$user->id,
-//       'client_id'=>1,
-//       'name'=>'a',
-//       'scopes'=>'[]',
-//       'revoked'=>0, 
-//   ]);
-        // $data = [
-        //          'id'    =>1,
-        //         //  'id'    =>$user->token,
-        //         'user_id'=>$user->id,
-        //         'client_id'=>2,
-        //         'name'=>'a',
-        //         'scope'=>'[]',
-        //         'revoked'=>0,   
-        // ];
-    
-        // $r->update($data);
-        
-            // dd($user->id . $user->id) ;
-
-        // $user = User::where('provider_id', $googleUser->getId())->first();
-
-            // // Create a new user in our database
-            // if (! $user) {
-            //     $user = User::create([
-            //         'email' => $googleUser->getEmail(),
-            //         'name' => $googleUser->getName(),
-            //         'provider_id' => $googleUser->getId(),
-            //     ]);
-            // }
-
-        // Log the user in
-        // auth()->login($user);
-
-        // Redirect to dashboard

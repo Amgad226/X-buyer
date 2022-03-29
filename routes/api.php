@@ -1,56 +1,22 @@
 <?php
-use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
 
 use App\Http\Controllers\API\AuthApiController;
 use App\Http\Controllers\API\ForgetAndRestPass;
 use App\Http\Controllers\API\ItemController;
 use App\Http\Controllers\API\VerificationController ;
-use App\Http\Controllers\Socialite\GitHub;
-// use App\Http\Controllers\API\VerificationController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Curl;
 use Illuminate\Support\Facades\Route;
-// use Laravel\Socialite\Facades\Socialite;
-use Laravel\Socialite\Facades\Socialite as  sss;
-
-use Laravel\Socialite\Facades\Socialite;
- 
-Route::get('/auth/redirect', function () {
-    return Socialite::driver('github')->redirect();
-});
- 
-Route::get('/auth/callback', function () {
-    $user = Socialite::driver('github')->user();  
- 
-    // $user->token
-});
-/*==============================================================================================================================*/
-/*==============================================================================================================================*/
-/*==============================================================================================================================*/
 
 
-Route::middleware('auth:api')->group( function(){
-Route::get('/get_Categories',                      [ItemController   ::class, 'get_Categories']);//->middleware(['auth','verified']);
-});
-
-Route::get('/ssss', function () {
-return response()->json(['msg' => 'OK']) ;}) ->name('verification.notice') ;
-// Auth::routes(['verify' => true]);
-
-  // Route::get('/verified-middleware-example', [VerificationController::class, 'resend'         ])   ;
-  // Route::get('/verified-middleware-example2', [VerificationController::class, 'verify'         ])   ;
-  // return response()->json(['msg' => 'the account is already confirmed  now']) ;
-// })->middleware('auth:api','verified');
-Route::get('email/verify/{id}', 'VerificationController@verify')->name('verification.verify');
-Route::get('email/resend', 'VerificationController@resend')->name('verification.resend');
 
 
-/*==============================================================================================================================*/
-/*==============================================================================================================================*/
-/*==============================================================================================================================*/
 
-  Route::post('/register' ,[AuthApiController::class, 'register'      ]);
-  Route::post('/login',    [AuthApiController::class, 'login'         ])   ;
+
+  Route::post('/register' ,         [AuthApiController::class, 'register'            ]);
+  Route::post('requestTokenGoogle', [AuthApiController::class, 'requestTokenGoogle'  ]);
+  Route::post('/login',             [AuthApiController::class, 'login'               ]);
+
+  Route::get('/get_Categories',     [ItemController   ::class, 'get_Categories']);
 /*_______________________________________________________________________________________________*/
 Route::middleware('auth:api')->group( function(){
   Route::post('/logout',                             [AuthApiController::class,'logout'                   ]);
@@ -74,21 +40,14 @@ Route::middleware('auth:api')->group( function(){
   Route::get('/search_By_Expir_date/{expir_date}',   [ItemController::class, 'search_Expir_Date'       ] );
   /*___________________________________________________________________________________________________]__*/
   Route::get ('/Add_View/{item_id}',                 [ItemController::class,  'Add_View'               ] );
+  /*___________________________________________________________________________________________________]__*/
   Route::get ('/AddLike/{item_id}',                  [ItemController::class,  'AddLike'                ] );
   Route::get ('/UnLike/{item_id}',                   [ItemController::class,  'UnLike'                 ] );
   Route::get ('/Get_Items_Liked',                    [ItemController::class,  'Get_Items_Liked'        ] );
-Route::post('/add_Comment/{item_id}',              [ItemController::class,  'addComment'             ] );
-
+  Route::post('/add_Comment/{item_id}',              [ItemController::class,  'addComment'             ] );
+  /*___________________________________________________________________________________________________]__*/
   Route::post('/remove_Comment/{comm_id}',           [ItemController::class,  'removeComment'          ] );
   Route::get ('/Show_Comments/{item_id}',            [ItemController::class,  'ShowComments'           ] );      
 });
 
-Route::get('login/github', [GitHub::class, 'redirectToProvider']);
-Route::get('login/github/callback', [GitHub::class, 'handleProviderCallback']);
 
-Route::get('login/facebook', [FaceBook::class, 'redirectToProvider']);
-Route::get('login/facebook/callback', [FaceBook::class, 'handleProviderCallback']);
-
-
-Route::get('login/google', [google::class, 'redirectToProvider']);
-Route::get('login/google/callback', [google::class, 'handleProviderCallback']);
