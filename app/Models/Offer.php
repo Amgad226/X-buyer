@@ -5,8 +5,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Model;
 
+
 class Offer extends Model
-{
+{  use HasFactory;
+
+    
+    
+
+
+    
     protected $table = 'offers';
     use  HasFactory;
 
@@ -25,4 +32,9 @@ class Offer extends Model
         return $this->belongsTo(Item::class, 'item_id');
     }
 
+    public function user()
+{
+    return $this->belongsTo(User::class );
+
+}
 }

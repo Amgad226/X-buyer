@@ -375,12 +375,27 @@ class ItemController extends Controller
                     'status'   => '1',
                     'details'  =>$items,
                 ]); }
-    //________________________________________________________________________________________________________
-    public function myproducts(){//باي
-        $items = Item::where('user_id' , Auth::id())->get();
+
+    public function offer(){
+
+        $items = Offer::first()->with('item');
         return response()->json([
             'status'   => '1',
             'details'  =>$items
+        ]);
+    }
+
+    //________________________________________________________________________________________________________
+    public function myproducts(){//باي
+    // $items = Item::scopePopular()->get();
+    // $items = Item::Quantity_more(13)->get();
+        // ->latest()->take(2) ->get();
+        // dd($items->title);
+    $items = Item::with('offer')->where('user_id', Auth::id())->get();
+
+        return response()->json([
+            'status'   => '1',
+            'details'  =>$items[1]->offer->Days1
         ]);}
     //________________________________________________________________________________________________________
      public function Sort_ASC(){

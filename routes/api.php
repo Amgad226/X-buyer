@@ -48,6 +48,11 @@ Route::middleware('auth:api')->group( function(){
   /*___________________________________________________________________________________________________]__*/
   Route::post('/remove_Comment/{comm_id}',           [ItemController::class,  'removeComment'          ] );
   Route::get ('/Show_Comments/{item_id}',            [ItemController::class,  'ShowComments'           ] );      
+
+  
+
 });
+Route::get ('/offer',            [ItemController::class,  'offer'           ] );      
+
 
 

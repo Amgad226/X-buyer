@@ -9,6 +9,9 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use Laravel\Passport\Passport;
 
+use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
+use \Znck\Eloquent\Traits\BelongsToThrough;
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -34,10 +37,9 @@ class User extends Authenticatable
         return $this->hasMany(Comment::class );
      }
 
-     public function git()
-     {
-        return $this->hasMany(O::class);
-
-     }
+     public function offer()
+    {
+        return $this->hasManyThrough(Offer::class,Item::class  );
+    }
    
 }
