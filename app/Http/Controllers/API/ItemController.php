@@ -13,6 +13,9 @@ use App\Models\User;
 use App\Models\View;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use AmrShawky\LaravelCurrency\Facade\Currency;
 
 class ItemController extends Controller 
 { 
@@ -20,14 +23,30 @@ class ItemController extends Controller
     // {
     //     $this->middleware(['auth','verified']);
     // }
-    
+    public function qr(){
+
+
+        $image = QrCode::format('png')
+                 
+                 ->generate('192.168.1.36:8000/ss');
+      $output_file = '/img/qr-code/img-' . time() . '.png';
+      Storage::disk('local')->put($output_file, $image);
+      return  response()->json(
+          ['msg'=>'QR CODE stored successfully']
+        );
+}
+
     public function get_Categories(){
         // dd(Auth::id());
-        
-        $offers=Category::all();
+        $a=Currency::convert()
+        ->from('USD')
+        ->to('')
+        ->amount(1)
+        ->get();
+        // $offers=Category::all();
         return response()->json([
             'status'   => '1',
-            'details'  =>$offers
+            'details'  =>$a
         ]);  }
     //________________________________________________________________________________________________________
     public function addItem(Request $request){
@@ -375,23 +394,25 @@ class ItemController extends Controller
                     'status'   => '1',
                     'details'  =>$items,
                 ]); }
+    //________________________________________________________________________________________________________
 
     public function offer(){
 
-        $items = Offer::first()->with('item');
-        return response()->json([
-            'status'   => '1',
-            'details'  =>$items
-        ]);
+        $offer = Offer::with('user')->get();
+                return view ('index',compact('offer'));
+
+        // return response()->json([
+        //     'status'   => '1',
+        //     'details'  =>$User->item[1]->offer->id
+        // ]);
     }
 
-    //________________________________________________________________________________________________________
     public function myproducts(){//باي
-    // $items = Item::scopePopular()->get();
-    // $items = Item::Quantity_more(13)->get();
-        // ->latest()->take(2) ->get();
-        // dd($items->title);
-    $items = Item::with('offer')->where('user_id', Auth::id())->get();
+         // $items = Item::scopePopular()->get();
+         // $items = Item::Quantity_more(13)->get();
+             // ->latest()->take(2) ->get();
+             // dd($items->title);
+     $items = Item::with('offer')->where('user_id', Auth::id())->get();
 
         return response()->json([
             'status'   => '1',

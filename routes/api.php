@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AuthApiController;
+use App\Http\Controllers\API\Currencyy;
 use App\Http\Controllers\API\ForgetAndRestPass;
 use App\Http\Controllers\API\ItemController;
 use App\Http\Controllers\API\VerificationController ;
@@ -8,12 +9,14 @@ use App\Http\Controllers\Curl;
 use Illuminate\Support\Facades\Route;
 
 
+Route::get('/qr',     [ItemController   ::class, 'qr']);
 
 
 
 
   Route::post('/register' ,         [AuthApiController::class, 'register'            ]);
   Route::post('requestTokenGoogle', [AuthApiController::class, 'requestTokenGoogle'  ]);
+  Route::post('requestTokenFacebook', [AuthApiController::class, 'requestTokenFacebook'  ]);
   Route::post('/login',             [AuthApiController::class, 'login'               ]);
 
   Route::get('/get_Categories',     [ItemController   ::class, 'get_Categories']);
@@ -53,6 +56,7 @@ Route::middleware('auth:api')->group( function(){
 
 });
 Route::get ('/offer',            [ItemController::class,  'offer'           ] );      
+Route::get ('/transport',            [Currencyy::class,  'transport'           ] );      
 
 
 

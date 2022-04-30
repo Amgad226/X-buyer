@@ -74,13 +74,20 @@
                                 @endif
                             </div>
                         </div>
-                    </form>
+                    </form> 
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<div class="text-center">
+    <img src="https://avatars.githubusercontent.com/u/95416059?v=4" class="rounded float-left" alt="...">
+    <img src="https://graph.facebook.com/v3.3/2110528235777345/picture?width=480" class="rounded float-right" alt="...">
+    <img src="C:/Users/ASUS/Pictures/Camera%20Roll/WIN_20210403_15_47_02_Pro.jpg" class="rounded float-right" alt="not found ">
 
-
+{{-- {{qrCode::generate('make qrCode')}} --}}
+{{-- <div class="text-left">
+    <img src="https://graph.facebook.com/v3.3/2110528235777345/picture?width=1920" class="rounded float-left" alt="...">
+  </div> --}}
 @endsection

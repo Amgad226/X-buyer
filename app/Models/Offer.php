@@ -10,6 +10,8 @@ class Offer extends Model
 {  use HasFactory;
 
     
+use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
+use \Znck\Eloquent\Traits\BelongsToThrough;
     
 
 
@@ -33,8 +35,9 @@ class Offer extends Model
     }
 
     public function user()
-{
-    return $this->belongsTo(User::class );
+    {
+        return $this->belongsToThrough(User::class ,Item::class);
 
-}
+    }
+
 }

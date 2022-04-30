@@ -177,7 +177,9 @@ return [
         App\Providers\TelescopeServiceProvider::class,
 
         // Laravel\Socialite\Facades\Socialite::class
+        // SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
 
+        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
     ],
 
     /*
@@ -234,6 +236,9 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'Socialite'=>Laravel\Socialite\Facades\Socialite::class,
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
+
+
     ],
 
 ];

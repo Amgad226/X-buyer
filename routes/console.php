@@ -18,3 +18,6 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 //________________________________________________
+// Artisan::command('send:name', function ($user) {
+//     $this->info("Sending email to: {$user}!");
+// });

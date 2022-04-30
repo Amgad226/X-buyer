@@ -18,7 +18,7 @@ class AuthApiController extends Controller
 {
     public function register(Request $request)
     {
-        
+        // dd($request->first_name);
         $validator = Validator::make($request-> all(),[
             'first_name' => ['required', 'string', 'max:50','min:3'],
             'last_name'  => ['required', 'string', 'max:50','min:3'],
@@ -79,7 +79,7 @@ class AuthApiController extends Controller
         // $user->notify(new WelcomeEmailNotification());
         // Mail::to($user->email)->send(new ResetMail ($details));
         // dd($input['first_name']);
-        Mail::to($user->email)->send(new welcomeMail($input));
+        // Mail::to($user->email)->send(new welcomeMail($input));ph
 
         return response()->json([
         'msg' => 'User successfully registered',
@@ -90,6 +90,19 @@ class AuthApiController extends Controller
     // _________________________________________________________________________________
     public function login(Request $request){ 
         if(Auth::attempt(['email' =>$request->email, 'password' => $request->password]))
+        {
+            $user = Auth::user();
+            
+            $success['token'] = $user->createToken('a')->accessToken;
+
+            return response()->json([
+               'msg'=> 'User successfully login',
+                'token'=>$success,
+                'user' => $user
+            ], 201);
+        }
+
+        else if(Auth::attempt(['first_name' =>$request->first_name, 'password' => $request->password]))
         {
             $user = Auth::user();
             
@@ -141,6 +154,46 @@ class AuthApiController extends Controller
             $UserToDataBase->save();
       
             $success['token'] = $UserToDataBase->createToken('AyhamAseelAmgadNour')->accessToken;
+    
+             return response()->json([
+            'msg' => 'User successfully registered',
+            'token' => $success,
+            'user' => $UserToDataBase
+            ], 201);}
+               // _________________________________________________________________________________
+        function requestTokenFacebook(Request $request){
+            // dd();
+            // Getting the user from socialite using token from google
+            // $UserFormFacebook = Socialite::driver('facebook')->stateless()->userFromToken($request->token);
+             $UserFormFacebook =  Socialite::driver('facebook')->stateless()->userFromToken($request->token);
+
+            
+         // dd($UserFormFacebook);
+            if (!$UserFormFacebook)
+            {
+                return response()->json('You do not have access to this email ',402);
+            }
+            $name= explode(" ",$UserFormFacebook->name);
+    
+            $UserToDataBase = User::create(
+                [
+                    'email' => $UserFormFacebook->email,
+                    'first_name'=>$name[0],
+                    'last_name'=>'d',
+                    'img'=>$UserFormFacebook->avatar,
+    
+                    // 'email_verified_at'=>date("Y-m-d h-i-s"),
+                    // 'confirmed_at'=>date("Y-m-d h-i-s"),
+                    // 'email_verified'=>true,
+                    // 'confirmation_code'=>rand(1,1000),
+                ]);
+            $UserToDataBase->email_verified_at=date("Y-m-d h-i-s");
+            $UserToDataBase->confirmed_at    =date("Y-m-d h-i-s");
+            $UserToDataBase->email_verified  =true;
+            $UserToDataBase->confirmation_code  =rand(1, 1000);
+            $UserToDataBase->save();
+      
+            $success['token'] = $UserToDataBase->createToken('amgad226')->accessToken;
     
              return response()->json([
             'msg' => 'User successfully registered',
